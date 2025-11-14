@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System - Fee and Salary Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-btn.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .language-toggle {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen"> 
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"> 
+            <div class="text-right mb-4"> 
+                <button onclick="toggleLanguage()"
+                    class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transition shadow-md text-sm">
+                    <i class="fas fa-language mr-2"></i><span id="langToggleBtn">हिंदी</span> 
+                </button> 
+            </div>
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-graduation-cap text-white text-4xl"></i> 
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2" data-en="School Management System"
+                    data-hi="विद्यालय प्रबंधन प्रणाली">School Management System</h1>
+                <p class="text-gray-600" data-en="Admin Login Portal" data-hi="एडमिन लॉगिन पोर्टल">Admin Login Portal</p>
+            </div>
+            <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                <p class="text-sm text-blue-800 font-semibold mb-2"><i class="fas fa-info-circle mr-2"></i>
+                    <span data-en="Demo Login Credentials:" data-hi="डेमो लॉगिन क्रेडेंशियल्स:">Demo Login Credentials:</span>
+                </p>
+                <p class="text-sm text-blue-700">👤 
+                    <span data-en="Username:" data-hi="यूजरनेम:">Username:</span> 
+                    <span class="font-mono bg-white px-2 py-1 rounded">admin</span>
+                </p>
+                <p class="text-sm text-blue-700">🔑 
+                    <span data-en="Password:" data-hi="पासवर्ड:">Password:</span> 
+                    <span class="font-mono bg-white px-2 py-1 rounded">admin123</span>
+                </p>
+            </div>
+            <form id="loginForm" class="space-y-6">
+                <div> 
+                    <label class="block text-gray-700 font-semibold mb-2"> 
+                        <i class="fas fa-user mr-2"></i><span data-en="Username" data-hi="यूजरनेम">Username</span> 
+                    </label> 
+                    <input type="text" id="username" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                        data-placeholder-en="Enter username" data-placeholder-hi="यूजरनेम दर्ज करें"
+                        placeholder="Enter username"> 
+                </div>
+                <div> 
+                    <label class="block text-gray-700 font-semibold mb-2"> 
+                        <i class="fas fa-lock mr-2"></i><span data-en="Password" data-hi="पासवर्ड">Password</span> 
+                    </label>
+                    <div class="relative"> 
+                        <input type="password" id="password" required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                            data-placeholder-en="Enter password" data-placeholder-hi="पासवर्ड दर्ज करें"
+                            placeholder="Enter password"> 
+                        <button type="button" onclick="togglePassword()"
+                            class="absolute right-3 top-3 text-gray-500 hover:text-gray-700"> 
+                            <i class="fas fa-eye" id="togglePasswordIcon"></i> 
+                        </button> 
+                    </div>
+                </div>
+                <div id="loginError" class="hidden bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <p class="text-red-700 text-sm font-semibold"> 
+                        <i class="fas fa-exclamation-circle mr-2"></i> 
+                        <span id="loginErrorMsg" data-en="Invalid username or password!" data-hi="गलत यूजरनेम या पासवर्ड!">Invalid username or password!</span> 
+                    </p>
+                </div> 
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-indigo-800 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <i class="fas fa-sign-in-alt mr-2"></i><span data-en="Login" data-hi="लॉगिन करें">Login</span>
+                </button>
+            </form>
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p><i class="fas fa-shield-alt text-blue-600 mr-1"></i><span data-en="Secure Admin Login"
+                        data-hi="सुरक्षित एडमिन लॉगिन">Secure Admin Login</span></p>
+            </div>
+        </div>
+    </div> 
+    
+    <div id="mainApp" class="hidden"> 
+        <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center"> 
+                            <i class="fas fa-graduation-cap text-blue-600 text-2xl"></i> 
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold" data-en="School Management System"
+                                data-hi="विद्यालय प्रबंधन प्रणाली">School Management System</h1>
+                            <p class="text-sm text-blue-100" data-en="Fee & Salary Management"
+                                data-hi="फीस और वेतन प्रबंधन">Fee & Salary Management</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4"> 
+                        <button onclick="toggleLanguage()"
+                            class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition shadow-lg">
+                            <i class="fas fa-language mr-2"></i><span id="langToggleMainBtn">हिंदी</span> 
+                        </button>
+                        <div class="text-right">
+                            <p class="text-sm">👤 <span data-en="Admin:" data-hi="एडमिन:">Admin:</span> 
+                                <span id="loggedInUser" class="font-semibold">Admin</span>
+                            </p>
+                            <p class="text-sm">📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
+                        </div> 
+                        <button onclick="logout()"
+                            class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition shadow-lg">
+                            <i class="fas fa-sign-out-alt mr-2"></i><span data-en="Logout" data-hi="लॉगआउट">Logout</span> 
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header> 
+        <div class="container mx-auto px-4 py-8"> 
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-600 text-sm" data-en="Total Students" data-hi="कुल छात्र">Total Students</p>
+                            <p class="text-3xl font-bold text-blue-600" id="totalStudents">0</p>
+                        </div> 
+                        <i class="fas fa-users text-4xl text-blue-200"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-600 text-sm" data-en="Total Fee Collection" data-hi="कुल फीस संग्रह">Total Fee Collection</p>
+                            <p class="text-3xl font-bold text-green-600">₹<span id="totalFees">0</span></p>
+                        </div> 
+                        <i class="fas fa-rupee-sign text-4xl text-green-200"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-600 text-sm" data-en="Total Teachers" data-hi="कुल शिक्षक">Total Teachers</p>
+                            <p class="text-3xl font-bold text-purple-600" id="totalTeachers">0</p>
+                        </div> 
+                        <i class="fas fa-chalkboard-teacher text-4xl text-purple-200"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-600 text-sm" data-en="Total Salary" data-hi="कुल वेतन">Total Salary</p>
+                            <p class="text-3xl font-bold text-red-600">₹<span id="totalSalary">0</span></p>
+                        </div> 
+                        <i class="fas fa-money-bill-wave text-4xl text-red-200"></i>
+                    </div>
+                </div>
+            </div> 
+            <div class="bg-white rounded-t-lg shadow-lg no-print">
+                <div class="flex flex-wrap border-b"> 
+                    <button class="tab-btn active px-6 py-4 font-semibold text-gray-700 hover:bg-blue-50 transition"
+                        onclick="openTab('studentFees')"> 
+                        <i class="fas fa-user-graduate mr-2"></i><span data-en="Student Fee Management" data-hi="छात्र फीस प्रबंधन">Student Fee Management</span>
+                    </button> 
+                    <button class="tab-btn px-6 py-4 font-semibold text-gray-700 hover:bg-blue-50 transition"
+                        onclick="openTab('teacherSalary')"> 
+                        <i class="fas fa-chalkboard-teacher mr-2"></i><span data-en="Teacher Salary Management" data-hi="शिक्षक वेतन प्रबंधन">Teacher Salary Management</span> 
+                    </button> 
+                    <button class="tab-btn px-6 py-4 font-semibold text-gray-700 hover:bg-blue-50 transition"
+                        onclick="openTab('reports')"> 
+                        <i class="fas fa-chart-bar mr-2"></i><span data-en="Reports" data-hi="रिपोर्ट्स">Reports</span> 
+                    </button> 
+                </div>
+            </div> 
+            <div id="studentFees" class="tab-content active bg-white rounded-b-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6" data-en="Student Fee Management"
+                    data-hi="छात्र फीस प्रबंधन">Student Fee Management</h2> 
+                <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-800" data-en="Add New Student"
+                        data-hi="नया छात्र जोड़ें">Add New Student</h3>
+                    <form id="addStudentForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Student Name *" data-hi="छात्र का नाम *">Student Name *</label> 
+                            <input type="text" id="studentName" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Class *" data-hi="कक्षा *">Class *</label> 
+                            <select id="studentClass" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <option value="" data-en="Select Class" data-hi="कक्षा चुनें">Select Class</option>
+                                <option value="1" data-en="Class 1" data-hi="कक्षा 1">Class 1</option>
+                                <option value="2" data-en="Class 2" data-hi="कक्षा 2">Class 2</option>
+                                <option value="3" data-en="Class 3" data-hi="कक्षा 3">Class 3</option>
+                                <option value="4" data-en="Class 4" data-hi="कक्षा 4">Class 4</option>
+                                <option value="5" data-en="Class 5" data-hi="कक्षा 5">Class 5</option>
+                                <option value="6" data-en="Class 6" data-hi="कक्षा 6">Class 6</option>
+                                <option value="7" data-en="Class 7" data-hi="कक्षा 7">Class 7</option>
+                                <option value="8" data-en="Class 8" data-hi="कक्षा 8">Class 8</option>
+                                <option value="9" data-en="Class 9" data-hi="कक्षा 9">Class 9</option>
+                                <option value="10" data-en="Class 10" data-hi="कक्षा 10">Class 10</option>
+                                <option value="11" data-en="Class 11" data-hi="कक्षा 11">Class 11</option>
+                                <option value="12" data-en="Class 12" data-hi="कक्षा 12">Class 12</option>
+                            </select> 
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Roll Number *" data-hi="रोल नंबर *">Roll Number *</label> 
+                            <input type="text" id="rollNumber" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Parent Name *" data-hi="माता-पिता का नाम *">Parent Name *</label> 
+                            <input type="text" id="parentName" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Mobile Number *" data-hi="मोबाइल नंबर *">Mobile Number *</label> 
+                            <input type="tel" id="studentMobile" required pattern="[0-9]{10}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Annual Fee (₹) *" data-hi="वार्षिक फीस (₹) *">Annual Fee (₹) *</label> 
+                            <input type="number" id="annualFees" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div class="md:col-span-3"> 
+                            <button type="submit"
+                                class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                                <i class="fas fa-plus mr-2"></i><span data-en="Add Student" data-hi="छात्र जोड़ें">Add Student</span> 
+                            </button> 
+                        </div>
+                    </form>
+                </div> 
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800" data-en="Student List and Fee Collection"
+                        data-hi="छात्र सूची और फीस संग्रह">Student List and Fee Collection</h3>
+                    <div class="mb-4"> 
+                        <input type="text" id="searchStudent"
+                            data-placeholder-en="Search student by name or roll number..."
+                            data-placeholder-hi="छात्र का नाम या रोल नंबर खोजें..."
+                            placeholder="Search student by name or roll number..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-blue-600 text-white">
+                                <tr>
+                                    <th class="px-4 py-3 text-left" data-en="Roll Number" data-hi="रोल नंबर">Roll Number</th>
+                                    <th class="px-4 py-3 text-left" data-en="Student Name" data-hi="छात्र का नाम">Student Name</th>
+                                    <th class="px-4 py-3 text-left" data-en="Class" data-hi="कक्षा">Class</th>
+                                    <th class="px-4 py-3 text-left" data-en="Parent" data-hi="माता-पिता">Parent</th>
+                                    <th class="px-4 py-3 text-left" data-en="Mobile" data-hi="मोबाइल">Mobile</th>
+                                    <th class="px-4 py-3 text-left" data-en="Annual Fee" data-hi="वार्षिक फीस">Annual Fee</th>
+                                    <th class="px-4 py-3 text-left" data-en="Paid" data-hi="भुगतान की गई">Paid</th>
+                                    <th class="px-4 py-3 text-left" data-en="Pending" data-hi="बकाया">Pending</th>
+                                    <th class="px-4 py-3 text-left no-print" data-en="Action" data-hi="कार्यवाही">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+            <div id="teacherSalary" class="tab-content bg-white rounded-b-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6" data-en="Teacher Salary Management"
+                    data-hi="शिक्षक वेतन प्रबंधन">Teacher Salary Management</h2> 
+                <div class="bg-purple-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4 text-purple-800" data-en="Add New Teacher"
+                        data-hi="नया शिक्षक जोड़ें">Add New Teacher</h3>
+                    <form id="addTeacherForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Teacher Name *" data-hi="शिक्षक का नाम *">Teacher Name *</label> 
+                            <input type="text" id="teacherName" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Subject *" data-hi="विषय *">Subject *</label> 
+                            <input type="text" id="teacherSubject" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Employee ID *" data-hi="कर्मचारी आईडी *">Employee ID *</label> 
+                            <input type="text" id="teacherId" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Mobile Number *" data-hi="मोबाइल नंबर *">Mobile Number *</label> 
+                            <input type="tel" id="teacherMobile" required pattern="[0-9]{10}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Qualification *" data-hi="योग्यता *">Qualification *</label> 
+                            <input type="text" id="teacherQualification" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div> 
+                            <label class="block text-gray-700 mb-2" data-en="Monthly Salary (₹) *" data-hi="मासिक वेतन (₹) *">Monthly Salary (₹) *</label> 
+                            <input type="number" id="monthlySalary" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                        </div>
+                        <div class="md:col-span-3"> 
+                            <button type="submit"
+                                class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition">
+                                <i class="fas fa-plus mr-2"></i><span data-en="Add Teacher" data-hi="शिक्षक जोड़ें">Add Teacher</span> 
+                            </button> 
+                        </div>
+                    </form>
+                </div> 
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800" data-en="Teacher List and Salary Payment"
+                        data-hi="शिक्षक सूची और वेतन भुगतान">Teacher List and Salary Payment</h3>
+                    <div class="mb-4"> 
+                        <input type="text" id="searchTeacher"
+                            data-placeholder-en="Search teacher by name or employee ID..."
+                            data-placeholder-hi="शिक्षक का नाम या कर्मचारी आईडी खोजें..."
+                            placeholder="Search teacher by name or employee ID..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-purple-600 text-white">
+                                <tr>
+                                    <th class="px-4 py-3 text-left" data-en="Employee ID" data-hi="कर्मचारी आईडी">Employee ID</th>
+                                    <th class="px-4 py-3 text-left" data-en="Teacher Name" data-hi="शिक्षक का नाम">Teacher Name</th>
+                                    <th class="px-4 py-3 text-left" data-en="Subject" data-hi="विषय">Subject</th>
+                                    <th class="px-4 py-3 text-left" data-en="Qualification" data-hi="योग्यता">Qualification</th>
+                                    <th class="px-4 py-3 text-left" data-en="Mobile" data-hi="मोबाइल">Mobile</th>
+                                    <th class="px-4 py-3 text-left" data-en="Monthly Salary" data-hi="मासिक वेतन">Monthly Salary</th>
+                                    <th class="px-4 py-3 text-left" data-en="Paid" data-hi="भुगतान किया गया">Paid</th>
+                                    <th class="px-4 py-3 text-left" data-en="Pending" data-hi="बकाया">Pending</th>
+                                    <th class="px-4 py-3 text-left no-print" data-en="Action" data-hi="कार्यवाही">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacherTableBody" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+            <div id="reports" class="tab-content bg-white rounded-b-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6" data-en="Reports and Summary"
+                    data-hi="रिपोर्ट्स और सारांश">Reports and Summary</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6"> 
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
+                        <h3 class="text-xl font-semibold mb-4 text-green-800" data-en="Financial Summary"
+                            data-hi="वित्तीय सारांश">Financial Summary</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Total Fee Collection:" data-hi="कुल फीस संग्रह:">Total Fee Collection:</span> 
+                                <span class="font-bold text-green-600">₹<span id="reportTotalFees">0</span></span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Total Salary Payment:" data-hi="कुल वेतन भुगतान:">Total Salary Payment:</span> 
+                                <span class="font-bold text-red-600">₹<span id="reportTotalSalary">0</span></span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Net Income:" data-hi="शुद्ध आय:">Net Income:</span>
+                                <span class="font-bold text-blue-600">₹<span id="netIncome">0</span></span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Pending Fees:" data-hi="बकाया फीस:">Pending Fees:</span> 
+                                <span class="font-bold text-orange-600">₹<span id="pendingFees">0</span></span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Pending Salary:" data-hi="बकाया वेतन:">Pending Salary:</span> 
+                                <span class="font-bold text-orange-600">₹<span id="pendingSalary">0</span></span> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
+                        <h3 class="text-xl font-semibold mb-4 text-blue-800" data-en="Statistics" data-hi="सांख्यिकी">Statistics</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Total Students:" data-hi="कुल छात्र:">Total Students:</span> 
+                                <span class="font-bold text-blue-600" id="reportTotalStudents">0</span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Total Teachers:" data-hi="कुल शिक्षक:">Total Teachers:</span> 
+                                <span class="font-bold text-purple-600" id="reportTotalTeachers">0</span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Average Fee:" data-hi="औसत फीस:">Average Fee:</span>
+                                <span class="font-bold text-green-600">₹<span id="avgFees">0</span></span> 
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg"> 
+                                <span class="text-gray-700" data-en="Average Salary:" data-hi="औसत वेतन:">Average Salary:</span> 
+                                <span class="font-bold text-red-600">₹<span id="avgSalary">0</span></span> 
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="flex gap-4 no-print"> 
+                    <button onclick="window.print()"
+                        class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        <i class="fas fa-print mr-2"></i><span data-en="Print Report" data-hi="रिपोर्ट प्रिंट करें">Print Report</span> 
+                    </button> 
+                    <button onclick="exportData()"
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                        <i class="fas fa-download mr-2"></i><span data-en="Download Data" data-hi="डेटा डाउनलोड करें">Download Data</span> 
+                    </button> 
+                </div>
+            </div>
+        </div> 
+        <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full mx-4">
+                <h3 class="text-2xl font-bold mb-4 text-gray-800" id="modalTitle" data-en="Make Payment"
+                    data-hi="भुगतान करें">Make Payment</h3>
+                <form id="paymentForm"> 
+                    <input type="hidden" id="paymentType"> 
+                    <input type="hidden" id="paymentIndex">
+                    <div class="mb-4"> 
+                        <label class="block text-gray-700 mb-2" data-en="Amount (₹) *" data-hi="राशि (₹) *">Amount (₹) *</label> 
+                        <input type="number" id="paymentAmount" required min="1"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <div class="mb-4"> 
+                        <label class="block text-gray-700 mb-2" data-en="Payment Method *" data-hi="भुगतान विधि *">Payment Method *</label> 
+                        <select id="paymentMethod" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="" data-en="Select" data-hi="चुनें">Select</option>
+                            <option value="Cash" data-en="Cash" data-hi="नकद">Cash</option>
+                            <option value="Online" data-en="Online" data-hi="ऑनलाइन">Online</option>
+                            <option value="Check" data-en="Check" data-hi="चेक">Check</option>
+                            <option value="UPI" data-en="UPI" data-hi="UPI">UPI</option>
+                        </select> 
+                    </div>
+                    <div class="mb-4"> 
+                        <label class="block text-gray-700 mb-2" data-en="Note" data-hi="टिप्पणी">Note</label> 
+                        <textarea id="paymentNote" rows="2"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                    </div>
+                    <div class="flex gap-4"> 
+                        <button type="submit"
+                            class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                            <i class="fas fa-check mr-2"></i><span data-en="Pay" data-hi="भुगतान करें">Pay</span>
+                        </button> 
+                        <button type="button" onclick="closePaymentModal()"
+                            class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition">
+                            <i class="fas fa-times mr-2"></i><span data-en="Cancel" data-hi="रद्द करें">Cancel</span>
+                        </button> 
+                    </div>
+                </form>
+            </div>
+        </div> 
+        <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-2xl p-8 max-w-lg w-full mx-4">
+                <div id="receiptContent"> </div>
+                <div class="flex gap-4 mt-6 no-print"> 
+                    <button onclick="printReceipt()"
+                        class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        <i class="fas fa-print mr-2"></i><span data-en="Print" data-hi="प्रिंट करें">Print</span>
+                    </button> 
+                    <button onclick="closeReceiptModal()"
+                        class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition">
+                        <i class="fas fa-times mr-2"></i><span data-en="Close" data-hi="बंद करें">Close</span> 
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+        // Language Management        
+        let currentLang = 'en';        
+        function toggleLanguage() {            
+            currentLang = currentLang === 'en' ? 'hi' : 'en';            
+            localStorage.setItem('language', currentLang);            
+            updateLanguage();        
+        }        
+        function updateLanguage() {            
+            const elements = document.querySelectorAll('[data-en]');            
+            elements.forEach(el => {                
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {                    
+                    const placeholderAttr = currentLang === 'en' ? 'data-placeholder-en' : 'data-placeholder-hi';                    
+                    if (el.hasAttribute(placeholderAttr)) {                        
+                        el.placeholder = el.getAttribute(placeholderAttr);                    
+                    }                
+                } else if (el.tagName === 'OPTION') {                    
+                    el.textContent = el.getAttribute('data-' + currentLang);                
+                } else {                    
+                    el.textContent = el.getAttribute('data-' + currentLang);                
+                }            
+            });                        
+            // Update toggle buttons            
+            const langToggleBtn = document.getElementById('langToggleBtn');            
+            const langToggleMainBtn = document.getElementById('langToggleMainBtn');            
+            if (langToggleBtn) langToggleBtn.textContent = currentLang === 'en' ? 'हिंदी' : 'English';            
+            if (langToggleMainBtn) langToggleMainBtn.textContent = currentLang === 'en' ? 'हिंदी' : 'English';        
+        }        
+        
+        // Data Storage        
+        let students = JSON.parse(localStorage.getItem('students')) || [];        
+        let teachers = JSON.parse(localStorage.getItem('teachers')) || [];        
+        
+        // Initialize        
+        document.addEventListener('DOMContentLoaded', function() {            
+            // Load saved language            
+            const savedLang = localStorage.getItem('language');            
+            if (savedLang) {                
+                currentLang = savedLang;                
+                updateLanguage();            
+            }                        
+            updateDateTime();            
+            setInterval(updateDateTime, 1000);            
+            renderStudents();            
+            renderTeachers();            
+            updateDashboard();            
+            updateReports();        
+        });        
+        
+        // Update Date and Time        
+        function updateDateTime() {            
+            const now = new Date();            
+            const dateElement = document.getElementById('currentDate');            
+            const timeElement = document.getElementById('currentTime');            
+            if (dateElement) dateElement.textContent = now.toLocaleDateString(currentLang === 'hi' ? 'hi-IN' : 'en-IN');            
+            if (timeElement) timeElement.textContent = now.toLocaleTimeString(currentLang === 'hi' ? 'hi-IN' : 'en-IN');        
+        }        
+        
+        // Tab Management        
+        function openTab(tabName) {            
+            const tabContents = document.getElementsByClassName('tab-content');            
+            const tabButtons = document.getElementsByClassName('tab-btn');                        
+            for (let content of tabContents) {                
+                content.classList.remove('active');            
+            }            
+            for (let button of tabButtons) {                
+                button.classList.remove('active');            
+            }                        
+            document.getElementById(tabName).classList.add('active');            
+            event.target.closest('.tab-btn').classList.add('active');        
+        }        
+        
+        // Add Student        
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {            
+            e.preventDefault();                        
+            const student = {                
+                id: Date.now(),                
+                name: document.getElementById('studentName').value,                
+                class: document.getElementById('studentClass').value,                
+                rollNumber: document.getElementById('rollNumber').value,                
+                parentName: document.getElementById('parentName').value,                
+                mobile: document.getElementById('studentMobile').value,                
+                annualFees: parseFloat(document.getElementById('annualFees').value),                
+                paidAmount: 0,                
+                payments: []            
+            };                        
+            students.push(student);            
+            localStorage.setItem('students', JSON.stringify(students));                        
+            this.reset();            
+            renderStudents();            
+            updateDashboard();            
+            updateReports();                        
+            alert(currentLang === 'en' ? 'Student added successfully!' : 'छात्र सफलतापूर्वक जोड़ा गया!');        
+        });        
+        
+        // Add Teacher        
+        document.getElementById('addTeacherForm').addEventListener('submit', function(e) {            
+            e.preventDefault();                        
+            const teacher = {                
+                id: Date.now(),                
+                name: document.getElementById('teacherName').value,                
+                subject: document.getElementById('teacherSubject').value,                
+                employeeId: document.getElementById('teacherId').value,                
+                mobile: document.getElementById('teacherMobile').value,                
+                qualification: document.getElementById('teacherQualification').value,                
+                monthlySalary: parseFloat(document.getElementById('monthlySalary').value),                
+                paidAmount: 0,                
+                payments: []            
+            };                        
+            teachers.push(teacher);            
+            localStorage.setItem('teachers', JSON.stringify(teachers));                        
+            this.reset();            
+            renderTeachers();            
+            updateDashboard();            
+            updateReports();                        
+            alert(currentLang === 'en' ? 'Teacher added successfully!' : 'शिक्षक सफलतापूर्वक जोड़ा गया!');        
+        });        
+        
+        // Render Students        
+        function renderStudents() {            
+            const tbody = document.getElementById('studentTableBody');            
+            const searchTerm = document.getElementById('searchStudent').value.toLowerCase();                        
+            tbody.innerHTML = '';                        
+            const filteredStudents = students.filter(s =>                 
+                s.name.toLowerCase().includes(searchTerm) ||                 
+                s.rollNumber.toLowerCase().includes(searchTerm)            
+            );                        
+            filteredStudents.forEach((student, index) => {                
+                const pending = student.annualFees - student.paidAmount;                
+                const paymentText = currentLang === 'en' ? 'Payment' : 'भुगतान';                
+                const row = `                    
+                    <tr class="hover:bg-gray-50">                        
+                        <td class="px-4 py-3">${student.rollNumber}</td>                        
+                        <td class="px-4 py-3 font-semibold">${student.name}</td>                        
+                        <td class="px-4 py-3">${student.class}</td>                        
+                        <td class="px-4 py-3">${student.parentName}</td>                        
+                        <td class="px-4 py-3">${student.mobile}</td>                        
+                        <td class="px-4 py-3">₹${student.annualFees.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 text-green-600 font-semibold">₹${student.paidAmount.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 text-red-600 font-semibold">₹${pending.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 no-print">                            
+                            <button onclick="openPayment('student', ${students.indexOf(student)})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">                                
+                                <i class="fas fa-rupee-sign"></i> ${paymentText}                            
+                            </button>                            
+                            <button onclick="deleteStudent(${students.indexOf(student)})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">                                
+                                <i class="fas fa-trash"></i>                            
+                            </button>                        
+                        </td>                    
+                    </tr>                
+                `;                
+                tbody.innerHTML += row;            
+            });        
+        }        
+        
+        // Render Teachers        
+        function renderTeachers() {            
+            const tbody = document.getElementById('teacherTableBody');            
+            const searchTerm = document.getElementById('searchTeacher').value.toLowerCase();                        
+            tbody.innerHTML = '';                        
+            const filteredTeachers = teachers.filter(t =>                 
+                t.name.toLowerCase().includes(searchTerm) ||                 
+                t.employeeId.toLowerCase().includes(searchTerm)            
+            );                        
+            filteredTeachers.forEach((teacher, index) => {                
+                const pending = (teacher.monthlySalary * 12) - teacher.paidAmount;                
+                const paymentText = currentLang === 'en' ? 'Payment' : 'भुगतान';                
+                const row = `                    
+                    <tr class="hover:bg-gray-50">                        
+                        <td class="px-4 py-3">${teacher.employeeId}</td>                        
+                        <td class="px-4 py-3 font-semibold">${teacher.name}</td>                        
+                        <td class="px-4 py-3">${teacher.subject}</td>                        
+                        <td class="px-4 py-3">${teacher.qualification}</td>                        
+                        <td class="px-4 py-3">${teacher.mobile}</td>                        
+                        <td class="px-4 py-3">₹${teacher.monthlySalary.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 text-green-600 font-semibold">₹${teacher.paidAmount.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 text-red-600 font-semibold">₹${pending.toLocaleString('en-IN')}</td>                        
+                        <td class="px-4 py-3 no-print">                            
+                            <button onclick="openPayment('teacher', ${teachers.indexOf(teacher)})" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">                                
+                                <i class="fas fa-rupee-sign"></i> ${paymentText}                            
+                            </button>                            
+                            <button onclick="deleteTeacher(${teachers.indexOf(teacher)})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">                                
+                                <i class="fas fa-trash"></i>                            
+                            </button>                        
+                        </td>                    
+                    </tr>                
+                `;                
+                tbody.innerHTML += row;            
+            });        
+        }        
+        
+        // Open Payment Modal        
+        function openPayment(type, index) {            
+            document.getElementById('paymentType').value = type;            
+            document.getElementById('paymentIndex').value = index;                        
+            if (type === 'student') {                
+                const pending = students[index].annualFees - students[index].paidAmount;                
+                const title = currentLang === 'en' ? `Student Fee Payment - ${students[index].name}` : `छात्र फीस भुगतान - ${students[index].name}`;                
+                document.getElementById('modalTitle').textContent = title;                
+                document.getElementById('paymentAmount').max = pending;            
+            } else {                
+                const pending = (teachers[index].monthlySalary * 12) - teachers[index].paidAmount;                
+                const title = currentLang === 'en' ? `Teacher Salary Payment - ${teachers[index].name}` : `शिक्षक वेतन भुगतान - ${teachers[index].name}`;                
+                document.getElementById('modalTitle').textContent = title;                
+                document.getElementById('paymentAmount').max = pending;            
+            }                        
+            document.getElementById('paymentModal').classList.remove('hidden');            
+            document.getElementById('paymentModal').classList.add('flex');        
+        }        
+        
+        // Close Payment Modal        
+        function closePaymentModal() {            
+            document.getElementById('paymentModal').classList.add('hidden');            
+            document.getElementById('paymentModal').classList.remove('flex');            
+            document.getElementById('paymentForm').reset();        
+        }        
+        
+        // Process Payment        
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {            
+            e.preventDefault();                        
+            const type = document.getElementById('paymentType').value;            
+            const index = parseInt(document.getElementById('paymentIndex').value);            
+            const amount = parseFloat(document.getElementById('paymentAmount').value);            
+            const method = document.getElementById('paymentMethod').value;            
+            const note = document.getElementById('paymentNote').value;                        
+            const payment = {                
+                amount: amount,                
+                method: method,                
+                note: note,                
+                date: new Date().toLocaleString(currentLang === 'hi' ? 'hi-IN' : 'en-IN'),                
+                receiptNo: 'REC' + Date.now()            
+            };                        
+            if (type === 'student') {                
+                students[index].paidAmount += amount;                
+                students[index].payments.push(payment);                
+                localStorage.setItem('students', JSON.stringify(students));                
+                renderStudents();                
+                generateReceipt('student', students[index], payment);            
+            } else {                
+                teachers[index].paidAmount += amount;                
+                teachers[index].payments.push(payment);                
+                localStorage.setItem('teachers', JSON.stringify(teachers));                
+                renderTeachers();                
+                generateReceipt('teacher', teachers[index], payment);            
+            }                        
+            updateDashboard();            
+            updateReports();            
+            closePaymentModal();        
+        });        
+        
+        // Generate Receipt        
+        function generateReceipt(type, person, payment) {            
+            const receiptContent = document.getElementById('receiptContent');                        
+            const titleText = currentLang === 'en' ? 'School Management System' : 'विद्यालय प्रबंधन प्रणाली';            
+            const receiptText = currentLang === 'en' ? 'Payment Receipt' : 'भुगतान रसीद';            
+            const receiptNoText = currentLang === 'en' ? 'Receipt No:' : 'रसीद नंबर:';            
+            const dateText = currentLang === 'en' ? 'Date:' : 'तारीख:';                        
+            let html = `                
+                <div class="border-4 border-blue-600 p-6">                    
+                    <div class="text-center mb-6">                        
+                        <h2 class="text-3xl font-bold text-blue-600">${titleText}</h2>                        
+                        <p class="text-gray-600">${receiptText}</p>                    
+                    </div>                    
+                    <div class="border-t-2 border-b-2 border-gray-300 py-3 mb-4">                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${receiptNoText}</span>                            
+                            <span>${payment.receiptNo}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${dateText}</span>                            
+                            <span>${payment.date}</span>                        
+                        </div>                    
+                    </div>            
+            `;                        
+            if (type === 'student') {                
+                const studentNameText = currentLang === 'en' ? 'Student Name:' : 'छात्र का नाम:';                
+                const classText = currentLang === 'en' ? 'Class:' : 'कक्षा:';                
+                const rollNoText = currentLang === 'en' ? 'Roll Number:' : 'रोल नंबर:';                
+                const parentNameText = currentLang === 'en' ? 'Parent Name:' : 'माता-पिता का नाम:';                                
+                html += `                    
+                    <div class="mb-4 space-y-2">                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${studentNameText}</span>                            
+                            <span>${person.name}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${classText}</span>                            
+                            <span>${person.class}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${rollNoText}</span>                            
+                            <span>${person.rollNumber}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${parentNameText}</span>                            
+                            <span>${person.parentName}</span>                        
+                        </div>                    
+                    </div>                
+                `;            
+            } else {                
+                const teacherNameText = currentLang === 'en' ? 'Teacher Name:' : 'शिक्षक का नाम:';                
+                const empIdText = currentLang === 'en' ? 'Employee ID:' : 'कर्मचारी आईडी:';                
+                const subjectText = currentLang === 'en' ? 'Subject:' : 'विषय:';                                
+                html += `                    
+                    <div class="mb-4 space-y-2">                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${teacherNameText}</span>                            
+                            <span>${person.name}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${empIdText}</span>                            
+                            <span>${person.employeeId}</span>                        
+                        </div>                        
+                        <div class="flex justify-between">                            
+                            <span class="font-semibold">${subjectText}</span>                            
+                            <span>${person.subject}</span>                        
+                        </div>                    
+                    </div>                
+                `;            
+            }                        
+            const amountText = currentLang === 'en' ? 'Payment Amount:' : 'भुगतान राशि:';            
+            const methodText = currentLang === 'en' ? 'Payment Method:' : 'भुगतान विधि:';            
+            const noteText = currentLang === 'en' ? 'Note:' : 'टिप्पणी:';            
+            const computerGenText = currentLang === 'en' ? 'This is a computer generated receipt' : 'यह कंप्यूटर जनित रसीद है';            
+            const thankYouText = currentLang === 'en' ? 'Thank You!' : 'धन्यवाद!';                        
+            html += `                    
+                <div class="bg-green-50 p-4 rounded-lg mb-4">                        
+                    <div class="flex justify-between text-xl font-bold">                            
+                        <span>${amountText}</span>                            
+                        <span class="text-green-600">₹${payment.amount.toLocaleString('en-IN')}</span>                        
+                    </div>                        
+                    <div class="flex justify-between mt-2">                            
+                        <span>${methodText}</span>                            
+                        <span>${payment.method}</span>                        
+                    </div>                        
+                    ${payment.note ? `<div class="mt-2"><span class="font-semibold">${noteText}</span> ${payment.note}</div>` : ''}                    
+                </div>                    
+                <div class="text-center text-sm text-gray-600 mt-6">                        
+                    <p>${computerGenText}</p>                        
+                    <p class="mt-2">${thankYouText}</p>                    
+                </div>                
+            </div>            
+            `;                        
+            receiptContent.innerHTML = html;            
+            document.getElementById('receiptModal').classList.remove('hidden');            
+            document.getElementById('receiptModal').classList.add('flex');        
+        }        
+        
+        // Close Receipt Modal        
+        function closeReceiptModal() {            
+            document.getElementById('receiptModal').classList.add('hidden');            
+            document.getElementById('receiptModal').classList.remove('flex');        
+        }        
+        
+        // Print Receipt        
+        function printReceipt() {            
+            window.print();        
+        }        
+        
+        // Delete Student        
+        function deleteStudent(index) {            
+            const confirmText = currentLang === 'en' ? 'Are you sure you want to delete this student?' : 'क्या आप वाकई इस छात्र को हटाना चाहते हैं?';            
+            if (confirm(confirmText)) {                
+                students.splice(index, 1);                
+                localStorage.setItem('students', JSON.stringify(students));                
+                renderStudents();                
+                updateDashboard();                
+                updateReports();            
+            }        
+        }        
+        
+        // Delete Teacher        
+        function deleteTeacher(index) {            
+            const confirmText = currentLang === 'en' ? 'Are you sure you want to delete this teacher?' : 'क्या आप वाकई इस शिक्षक को हटाना चाहते हैं?';            
+            if (confirm(confirmText)) {                
+                teachers.splice(index, 1);                
+                localStorage.setItem('teachers', JSON.stringify(teachers));                
+                renderTeachers();                
+                updateDashboard();                
+                updateReports();            
+            }        
+        }        
+        
+        // Update Dashboard        
+        function updateDashboard() {            
+            document.getElementById('totalStudents').textContent = students.length;            
+            document.getElementById('totalTeachers').textContent = teachers.length;                        
+            const totalFees = students.reduce((sum, s) => sum + s.paidAmount, 0);            
+            const totalSalary = teachers.reduce((sum, t) => sum + t.paidAmount, 0);                        
+            document.getElementById('totalFees').textContent = totalFees.toLocaleString('en-IN');            
+            document.getElementById('totalSalary').textContent = totalSalary.toLocaleString('en-IN');        
+        }        
+        
+        // Update Reports        
+        function updateReports() {            
+            const totalFees = students.reduce((sum, s) => sum + s.paidAmount, 0);            
+            const totalSalary = teachers.reduce((sum, t) => sum + t.paidAmount, 0);            
+            const pendingFees = students.reduce((sum, s) => sum + (s.annualFees - s.paidAmount), 0);            
+            const pendingSalary = teachers.reduce((sum, t) => sum + ((t.monthlySalary * 12) - t.paidAmount), 0);            
+            const netIncome = totalFees - totalSalary;                        
+            document.getElementById('reportTotalFees').textContent = totalFees.toLocaleString('en-IN');            
+            document.getElementById('reportTotalSalary').textContent = totalSalary.toLocaleString('en-IN');            
+            document.getElementById('netIncome').textContent = netIncome.toLocaleString('en-IN');            
+            document.getElementById('pendingFees').textContent = pendingFees.toLocaleString('en-IN');            
+            document.getElementById('pendingSalary').textContent = pendingSalary.toLocaleString('en-IN');                        
+            document.getElementById('reportTotalStudents').textContent = students.length;            
+            document.getElementById('reportTotalTeachers').textContent = teachers.length;                        
+            const avgFees = students.length > 0 ? totalFees / students.length : 0;            
+            const avgSalary = teachers.length > 0 ? totalSalary / teachers.length : 0;                        
+            document.getElementById('avgFees').textContent = avgFees.toLocaleString('en-IN');            
+            document.getElementById('avgSalary').textContent = avgSalary.toLocaleString('en-IN');        
+        }        
+        
+        // Export Data        
+        function exportData() {            
+            const data = {                
+                students: students,                
+                teachers: teachers,                
+                exportDate: new Date().toLocaleString(currentLang === 'hi' ? 'hi-IN' : 'en-IN')            
+            };                        
+            const dataStr = JSON.stringify(data, null, 2);            
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });            
+            const url = URL.createObjectURL(dataBlob);            
+            const link = document.createElement('a');            
+            link.href = url;            
+            link.download = 'school-data-' + Date.now() + '.json';            
+            link.click();            
+            URL.revokeObjectURL(url);                        
+            const alertText = currentLang === 'en' ? 'Data downloaded successfully!' : 'डेटा सफलतापूर्वक डाउनलोड हो गया!';            
+            alert(alertText);        
+        }        
+        
+        // Search functionality        
+        document.getElementById('searchStudent').addEventListener('input', renderStudents);        
+        document.getElementById('searchTeacher').addEventListener('input', renderTeachers);        
+        
+        // Admin Credentials        
+        const ADMIN_CREDENTIALS = {            
+            username: 'admin',            
+            password: 'admin123'        
+        };        
+        
+        // Check if already logged in        
+        window.addEventListener('DOMContentLoaded', function() {            
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');            
+            if (isLoggedIn === 'true') {                
+                showMainApp();            
+            }        
+        });        
+        
+        // Login Form Handler        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {            
+            e.preventDefault();                        
+            const username = document.getElementById('username').value.trim();            
+            const password = document.getElementById('password').value;                        
+            // Validate credentials            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {                
+                // Successful login                
+                sessionStorage.setItem('isLoggedIn', 'true');                
+                sessionStorage.setItem('username', username);                                
+                // Show success animation                
+                const loginForm = document.getElementById('loginForm');                
+                loginForm.classList.add('opacity-0', 'transition-opacity', 'duration-500');                                
+                setTimeout(() => {                    
+                    showMainApp();                
+                }, 500);            
+            } else {                
+                // Failed login                
+                const errorDiv = document.getElementById('loginError');                
+                const loginFormDiv = document.querySelector('#loginForm').parentElement;                                
+                errorDiv.classList.remove('hidden');                
+                loginFormDiv.classList.add('shake');                                
+                // Clear password field                
+                document.getElementById('password').value = '';                                
+                // Remove shake animation after it completes                
+                setTimeout(() => {                    
+                    loginFormDiv.classList.remove('shake');                
+                }, 500);                                
+                // Hide error after 3 seconds                
+                setTimeout(() => {                    
+                    errorDiv.classList.add('hidden');                
+                }, 3000);            
+            }        
+        });        
+        
+        // Show Main Application        
+        function showMainApp() {            
+            document.getElementById('loginScreen').classList.add('hidden');            
+            document.getElementById('mainApp').classList.remove('hidden');                        
+            // Set logged in user name            
+            const username = sessionStorage.getItem('username') || 'Admin';            
+            document.getElementById('loggedInUser').textContent = username.charAt(0).toUpperCase() + username.slice(1);        
+        }        
+        
+        // Logout Function        
+        function logout() {            
+            const confirmText = currentLang === 'en' ? 'Are you sure you want to logout?' : 'क्या आप वाकई लॉगआउट करना चाहते हैं?';            
+            if (confirm(confirmText)) {                
+                sessionStorage.removeItem('isLoggedIn');                
+                sessionStorage.removeItem('username');                                
+                // Fade out main app                
+                const mainApp = document.getElementById('mainApp');                
+                mainApp.classList.add('opacity-0', 'transition-opacity', 'duration-500');                                
+                setTimeout(() => {                    
+                    mainApp.classList.add('hidden');                    
+                    mainApp.classList.remove('opacity-0');                                        
+                    // Show login screen                    
+                    const loginScreen = document.getElementById('loginScreen');                    
+                    loginScreen.classList.remove('hidden');                                        
+                    // Reset form                    
+                    document.getElementById('loginForm').reset();                    
+                    document.getElementById('loginError').classList.add('hidden');                
+                }, 500);            
+            }        
+        }        
+        
+        // Toggle Password Visibility        
+        function togglePassword() {            
+            const passwordField = document.getElementById('password');            
+            const toggleIcon = document.getElementById('togglePasswordIcon');                        
+            if (passwordField.type === 'password') {                
+                passwordField.type = 'text';                
+                toggleIcon.classList.remove('fa-eye');                
+                toggleIcon.classList.add('fa-eye-slash');            
+            } else {                
+                passwordField.type = 'password';                
+                toggleIcon.classList.remove('fa-eye-slash');                
+                toggleIcon.classList.add('fa-eye');            
+            }        
+        }        
+        
+        // Prevent back button after logout        
+        window.addEventListener('popstate', function() {            
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');            
+            if (isLoggedIn !== 'true') {                
+                window.location.reload();            
+            }        
+        });    
+        </script>
+    </div>
+</body>
+
+</html>
